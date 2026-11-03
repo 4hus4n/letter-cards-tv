@@ -494,7 +494,7 @@ const THAANA=[
  ["ތ", "thaa", "ތަރި", "Star", "star"],
  ["ލ", "laamu", "ލޯ", "Eye", "eye"],
  ["ގ", "gaafu", "ގުރާ", "Parrot", "parrot"],
- ["ޏ", "gnaviyani", "ޏަމްޏަމް", "Yum yum", "yumyum"],
+ ["ޏ", "gnaviyani", "ޏަމްޏަމް", "Nyamnyam fruit", "yumyum"],
  ["ސ", "seenu", "ސޯޓް", "Shorts", "shorts"],
  ["ޑ", "daviyani", "ޑަބިޔާ", "Big tin", "bigtin"],
  ["ޒ", "zaviyani", "ޒިބު", "Zip", "zip"],
@@ -670,10 +670,12 @@ eye:()=>`<g class="pulse" style="animation-duration:2.4s"><path d="M16 104Q100 2
 parrot:()=>`<path d="M20 166H180" stroke="#8A5A3B" stroke-width="10" stroke-linecap="round"/>${leaf(150,166,-20)}<g class="rock" style="transform-origin:50% 100%"><path class="sway" style="transform-origin:50% 0%" d="M92 150L80 196H100L104 150Z" fill="#4C6EF5"/><path d="M104 150L112 196H128L114 148Z" fill="#E5484D"/>
   <ellipse cx="104" cy="118" rx="36" ry="44" fill="#22B573"/><path class="flap" style="transform-origin:20% 10%" d="M110 96Q150 104 140 150Q118 144 106 118Z" fill="#1A8C58"/><path d="M118 114Q146 124 136 150" stroke="#FFC83D" stroke-width="5" fill="none"/>
   <circle cx="100" cy="66" r="30" fill="#3DBE5A"/><path d="M72 64Q60 70 66 86Q74 82 78 74Z" fill="#FFC83D"/><path class="quack" d="M74 64Q56 64 58 82Q66 92 76 80Z" fill="#F29D38"/><circle cx="96" cy="58" r="10" fill="#fff"/>${eye(94,58,5)}<circle cx="112" cy="74" r="6" fill="#FF7A95" opacity=".5"/></g>`,
-yumyum:()=>`<path d="M52 108H148L134 182H66Z" fill="#FF8FB8"/><path d="M64 108L72 182M84 108L88 182M104 108V182M124 108L118 182M142 108L130 182" stroke="#E86A95" stroke-width="3"/>
-  <g class="jig"><path d="M44 112Q34 84 64 82Q66 56 96 60Q110 40 132 60Q162 58 158 86Q174 104 152 114Z" fill="#FFF3D6"/><circle cx="100" cy="46" r="12" fill="#E5484D"/><path d="M100 34q4-10 12-12" stroke="#3DBE5A" stroke-width="3" fill="none"/>
-  ${[[70,92,'#FF5A6E'],[90,74,'#4C6EF5'],[124,72,'#22B573'],[140,94,'#FFC83D'],[108,96,'#8E5BD6']].map(([x,y,c])=>`<rect x="${x}" y="${y}" width="10" height="4" rx="2" fill="${c}" transform="rotate(${x%40} ${x} ${y})"/>`).join('')}</g>
-  ${eyes(100,140,14,5)}<path d="M90 156q10 10 20 0" stroke="${K}" stroke-width="4" fill="#FF6F8E" stroke-linecap="round"/><path class="pant" d="M98 160q4 8 8 0" fill="#FF6F8E"/>`,
+yumyum:()=>{const id=uid();return `<radialGradient id="${id}" cx="38%" cy="70%" r="75%"><stop offset="0" stop-color="#E8D66A"/><stop offset=".55" stop-color="#B9C84E"/><stop offset="1" stop-color="#8FAF3C"/></radialGradient>
+  <g class="rock"><path d="M92 30Q100 26 106 32Q124 34 130 52Q150 58 150 82Q162 100 154 122Q160 146 140 162Q126 184 100 182Q72 186 58 166Q38 152 44 128Q34 108 48 90Q46 66 64 56Q72 34 92 30Z" fill="url(#${id})"/>
+  <path d="M64 70q8-6 14 2M120 60q8-4 12 4M140 106q6 6 2 14M58 128q-6 6-2 14M96 160q8 4 14 0" stroke="#7E9C30" stroke-width="3" fill="none" stroke-linecap="round" opacity=".7"/>
+  ${[[78,96],[122,90],[104,132],[70,150],[136,142],[90,64]].map(([x,y])=>`<circle cx="${x}" cy="${y}" r="2.5" fill="#7E9C30" opacity=".6"/>`).join('')}
+  <path d="M98 32q-2-14 4-20" stroke="#8A5A3B" stroke-width="6" fill="none" stroke-linecap="round"/>${leaf(104,22,-24,'#4CA64A')}
+  ${shine(76,84,8,18,25)}${face(100,118)}</g>`},
 shorts:()=>`<g class="sway" style="transform-origin:50% 0%;animation-duration:1.8s"><path d="M44 54H156L170 168H112L100 100L88 168H30Z" fill="#4C6EF5" stroke="#4C6EF5" stroke-width="8" stroke-linejoin="round"/><rect x="40" y="44" width="120" height="20" rx="6" fill="#3A57D6"/>
   <path d="M100 64V100" stroke="#3A57D6" stroke-width="4"/><path d="M96 64q-10 20-20 22M104 64q10 20 20 22" stroke="#fff" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M36 150H86M114 150H164" stroke="#FFC83D" stroke-width="6"/>${eyes(100,80,26,5)}</g>`,
 bigtin:()=>`<g class="jig"><path d="M46 52V164Q100 186 154 164V52Z" fill="#C9D2E3"/><path d="M46 52V164Q100 186 154 164V52" fill="none" stroke="#8C95A8" stroke-width="4"/><path d="M46 84Q100 100 154 84M46 140Q100 156 154 140" stroke="#8C95A8" stroke-width="4" fill="none"/>
