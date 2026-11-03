@@ -874,13 +874,32 @@ $('recFile').onchange=async e=>{const f=e.target.files[0];e.target.value='';if(!
 const TV=/LetterCardsTV|Android ?TV|GoogleTV|\bAFT|BRAVIA|SMART-?TV|Tizen|Web0S|HbbTV/i.test(navigator.userAgent)||location.hash==='#tv';
 function tvLayer(){if(!$('picker').hidden)return $('picker');if(!$('recPanel').hidden)return $('recPanel');return $('deck').hidden?$('home'):$('deck')}
 function tvFocusables(){const card=$('card');return [...tvLayer().querySelectorAll('button,[data-tvfocus]')].filter(el=>!el.disabled&&el.offsetParent!==null&&!(el!==card&&el.closest('.card'))&&!el.closest('.nav'))}
+function tvRect(el){let x=0,y=0,n=el;while(n){x+=n.offsetLeft;y+=n.offsetTop;n=n.offsetParent}return{left:x,top:y,right:x+el.offsetWidth,bottom:y+el.offsetHeight,cx:x+el.offsetWidth/2,cy:y+el.offsetHeight/2}}
 function tvMove(dir){
   const list=tvFocusables(),cur=document.activeElement;
   if(!list.includes(cur)){const f=list.find(e=>e.classList.contains('cur'))||($('deck').hidden?list[0]:$('card'));f&&f.focus();return}
-  const r=cur.getBoundingClientRect(),cx=r.left+r.width/2,cy=r.top+r.height/2;let best=null,bs=Infinity;
-  for(const el of list){if(el===cur)continue;const q=el.getBoundingClientRect(),x=q.left+q.width/2,y=q.top+q.height/2;let main,gap,off;
-    if(dir==='left'||dir==='right'){main=dir==='right'?q.left-r.left:r.right-q.right;if(main<=4||(dir==='right'?x<=cx:x>=cx))continue;gap=Math.max(0,Math.max(r.top,q.top)-Math.min(r.bottom,q.bottom));off=Math.abs(y-cy)}
-    else{main=dir==='down'?q.top-r.top:r.bottom-q.bottom;if(main<=4||(dir==='down'?y<=cy:y>=cy))continue;gap=Math.max(0,Math.max(r.left,q.left)-Math.min(r.right,q.right));off=Math.abs(x-cx)}
+  const r=tvRect(cur);
+  // Grids (home tiles, card picker): move along the same row, or to the nearest item in the next row
+  const grid=cur.closest('.decks,.g');
+  if(grid){
+    const items=list.filter(el=>grid.contains(el)).map(el=>({el,r:tvRect(el)}));
+    const rows=[];items.sort((p,q)=>p.r.top-q.r.top||p.r.left-q.r.left).forEach(it=>{const row=rows.find(rw=>Math.abs(rw.top-it.r.top)<it.r.bottom-it.r.top-4);row?row.items.push(it):rows.push({top:it.r.top,items:[it]})});
+    rows.forEach(rw=>rw.items.sort((p,q)=>p.r.left-q.r.left));
+    const ri=rows.findIndex(rw=>rw.items.some(it=>it.el===cur)),row=rows[ri],ci=row.items.findIndex(it=>it.el===cur);
+    const rtl=getComputedStyle(grid).direction==='rtl';
+    let target=null;
+    if(dir==='left'||dir==='right'){const step=(dir==='right')!==rtl?1:-1;const vis=rtl?row.items.slice().reverse():row.items;const vi=vis.findIndex(it=>it.el===cur);
+      const t=vis[vi+(dir==='right'?1:-1)];target=t&&t.el}
+    else{const nr=rows[ri+(dir==='down'?1:-1)];if(nr){let best=null,bd=Infinity;nr.items.forEach(it=>{const d=Math.abs(it.r.cx-r.cx);if(d<bd){bd=d;best=it.el}});target=best}
+      else if(dir==='up'&&$('deck').hidden===false){/* leave grid upward: fall through to spatial */}}
+    if(target){target.focus();return}
+    if(dir!=='up')return;
+  }
+  let best=null,bs=Infinity;
+  for(const el of list){if(el===cur||(grid&&grid.contains(el)))continue;const q=tvRect(el);let main,gap,off;
+    if(dir==='left'||dir==='right'){main=dir==='right'?q.left-r.left:r.right-q.right;if(main<=4||(dir==='right'?q.cx<=r.cx:q.cx>=r.cx))continue;gap=Math.max(0,Math.max(r.top,q.top)-Math.min(r.bottom,q.bottom));off=Math.abs(q.cy-r.cy)}
+    else{main=dir==='down'?q.top-r.top:r.bottom-q.bottom;if(main<=4||(dir==='down'?q.cy<=r.cy:q.cy>=r.cy))continue;gap=Math.max(0,Math.max(r.left,q.left)-Math.min(r.right,q.right));off=Math.abs(q.cx-r.cx)}
+    if(gap>0&&(dir==='left'||dir==='right'))continue;
     const sc=main+gap*6+off*.3;if(sc<bs){bs=sc;best=el}}
   if(best)best.focus();
 }
@@ -901,24 +920,32 @@ if(TV){
   $('deck').appendChild(hint);
   let tvLastStep=0;
   const tvStep=dir=>{const now=Date.now();if(now-tvLastStep<240)return;tvLastStep=now;$('card').focus();go(dir)};
-  document.addEventListener('keydown',e=>{
-    if(splashOn)return;
-    const kc=e.keyCode,dirs={ArrowLeft:'left',ArrowRight:'right',ArrowUp:'up',ArrowDown:'down'};
-    let k=e.key;
-    if(kc===37||kc===21)k='ArrowLeft';else if(kc===39||kc===22)k='ArrowRight';else if(kc===38||kc===19)k='ArrowUp';else if(kc===40||kc===20)k='ArrowDown';else if(kc===13||kc===23)k='Enter';
-    if(k==='Escape'||k==='Backspace'||k==='GoBack'||k==='BrowserBack'){e.preventDefault();e.stopPropagation();tvBack();return}
-    if(k==='MediaPlayPause'||k==='MediaPlay'||k==='MediaPause'){e.preventDefault();if(deckKey&&$('picker').hidden)$('autoBtn').click();return}
+  // One place that decides what every remote button does. Called from the page's keydown
+  // and straight from the Android app (window.tvKey), so the TV's own focus logic never interferes.
+  window.tvHandle=function(k,rep){
+    if(splashOn){hideSplash();return true}
+    if(k==='Escape'||k==='Backspace'||k==='GoBack'||k==='BrowserBack'){tvBack();return true}
     const a=document.activeElement,inDeck=deckKey&&!$('deck').hidden&&$('picker').hidden&&$('recPanel').hidden,onBar=!!(a&&a.closest&&a.closest('.bar'));
+    if(k==='MediaPlayPause'||k==='MediaPlay'||k==='MediaPause'){if(inDeck&&!rep)$('autoBtn').click();return true}
+    if(k==='MediaFastForward'||k==='MediaTrackNext'){if(inDeck)tvStep(DECKS[deckKey].rtl?-1:1);return true}
+    if(k==='MediaRewind'||k==='MediaTrackPrevious'){if(inDeck)tvStep(DECKS[deckKey].rtl?1:-1);return true}
     if(inDeck&&!onBar){
-      if(k==='ArrowLeft'||k==='ArrowRight'){e.preventDefault();e.stopPropagation();tvStep((k==='ArrowRight')!==DECKS[deckKey].rtl?1:-1);return}
-      if(k==='Enter'||k===' '){e.preventDefault();e.stopPropagation();if(!e.repeat)tvOK();return}
-      if(k==='ArrowDown'){e.preventDefault();e.stopPropagation();$('card').focus();return}
-      if(k==='ArrowUp'){e.preventDefault();e.stopPropagation();$('card').focus();tvMove('up');return}
+      if(k==='ArrowLeft'||k==='ArrowRight'){tvStep((k==='ArrowRight')!==DECKS[deckKey].rtl?1:-1);return true}
+      if(k==='Enter'||k===' '){if(!rep)tvOK();return true}
+      if(k==='ArrowDown'){$('card').focus();return true}
+      if(k==='ArrowUp'){$('card').focus();tvMove('up');return true}
     }
-    if(inDeck&&onBar&&k==='ArrowDown'){e.preventDefault();e.stopPropagation();$('card').focus();return}
-    if(k==='MediaFastForward'||k==='MediaTrackNext'){if(inDeck){e.preventDefault();tvStep(DECKS[deckKey].rtl?-1:1)}return}
-    if(k==='MediaRewind'||k==='MediaTrackPrevious'){if(inDeck){e.preventDefault();tvStep(DECKS[deckKey].rtl?1:-1)}return}
-    if(dirs[k]){e.preventDefault();e.stopPropagation();tvMove(dirs[k])}
+    if(inDeck&&onBar&&k==='ArrowDown'){$('card').focus();return true}
+    const dirs={ArrowLeft:'left',ArrowRight:'right',ArrowUp:'up',ArrowDown:'down'};
+    if(dirs[k]){tvMove(dirs[k]);return true}
+    if(k==='Enter'||k===' '){if(rep)return true;const f=tvFocusables();if(a&&f.includes(a))a.click();else tvMove('right');return true}
+    return false;
+  };
+  window.tvKey=(k,rep)=>{try{return tvHandle(k,!!rep)}catch(e){return false}};
+  document.addEventListener('keydown',e=>{
+    const kc=e.keyCode;let k=e.key;
+    if(kc===37||kc===21)k='ArrowLeft';else if(kc===39||kc===22)k='ArrowRight';else if(kc===38||kc===19)k='ArrowUp';else if(kc===40||kc===20)k='ArrowDown';else if(kc===13||kc===23)k='Enter';
+    if(tvHandle(k,e.repeat)){e.preventDefault();e.stopImmediatePropagation()}
   },true);
 }
 

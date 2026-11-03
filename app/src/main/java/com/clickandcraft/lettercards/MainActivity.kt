@@ -34,6 +34,7 @@ class MainActivity : Activity() {
     private lateinit var web: WebView
     private var tts: TextToSpeech? = null
     @Volatile private var ttsReady = false
+    private var pageReady = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -63,6 +64,10 @@ class MainActivity : Activity() {
 
             override fun shouldOverrideUrlLoading(view: WebView, request: WebResourceRequest): Boolean =
                 request.url.host != "appassets.androidplatform.net"
+
+            override fun onPageFinished(view: WebView, url: String) {
+                pageReady = true
+            }
         }
         web.addJavascriptInterface(TtsBridge(), "AndroidTTS")
         setContentView(web)
@@ -118,6 +123,33 @@ class MainActivity : Activity() {
 
         @JavascriptInterface
         fun stop() { tts?.stop() }
+    }
+
+    // ---------- Remote: the page decides what every D-pad / OK / media button does ----------
+    // The keys are passed straight to the page and not to the WebView, so the WebView's own
+    // focus movement can't move the highlight a second time (that caused the jump to the next row).
+    override fun dispatchKeyEvent(event: KeyEvent): Boolean {
+        val name = when (event.keyCode) {
+            KeyEvent.KEYCODE_DPAD_LEFT -> "ArrowLeft"
+            KeyEvent.KEYCODE_DPAD_RIGHT -> "ArrowRight"
+            KeyEvent.KEYCODE_DPAD_UP -> "ArrowUp"
+            KeyEvent.KEYCODE_DPAD_DOWN -> "ArrowDown"
+            KeyEvent.KEYCODE_DPAD_CENTER, KeyEvent.KEYCODE_ENTER,
+            KeyEvent.KEYCODE_NUMPAD_ENTER, KeyEvent.KEYCODE_BUTTON_A -> "Enter"
+            KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE, KeyEvent.KEYCODE_MEDIA_PLAY,
+            KeyEvent.KEYCODE_MEDIA_PAUSE -> "MediaPlayPause"
+            KeyEvent.KEYCODE_MEDIA_FAST_FORWARD, KeyEvent.KEYCODE_MEDIA_NEXT -> "MediaFastForward"
+            KeyEvent.KEYCODE_MEDIA_REWIND, KeyEvent.KEYCODE_MEDIA_PREVIOUS -> "MediaRewind"
+            else -> null
+        }
+        if (name != null && pageReady) {
+            if (event.action == KeyEvent.ACTION_DOWN) {
+                val repeat = if (event.repeatCount > 0) "true" else "false"
+                web.evaluateJavascript("window.tvKey&&window.tvKey('$name',$repeat)", null)
+            }
+            return true
+        }
+        return super.dispatchKeyEvent(event)
     }
 
     // ---------- Remote: Back goes to the previous screen, exits from Home ----------
