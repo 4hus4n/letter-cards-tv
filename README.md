@@ -19,6 +19,13 @@ Keep `app/release.jks` in the repo: every build must be signed with the same key
 - Play/Pause: auto play
 - Back: close menu, then Home, then exit
 
+## Voices
+- English: Kokoro (af_heart), recorded into the app.
+- Arabic (Alif Baa, 99 Names): Piper voice ar_JO "kareem" (medium), from the sherpa-onnx
+  GitHub release of Piper voices, recorded into the app. Text is read with full vowel marks;
+  a final ة is read in its pause form (…ah).
+- No text-to-speech is needed on the TV.
+
 ## Your own voices
 Put `dhivehi-voices.json` and/or `names-voices.json` (saved from the phone version) into
 `app/src/main/assets/` and push. The TV app will use them.
