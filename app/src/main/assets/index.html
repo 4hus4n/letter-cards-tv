@@ -97,10 +97,10 @@ button:focus-visible{outline:4px solid var(--sun);outline-offset:3px}
   display:flex;flex-direction:column;align-items:center;padding:12px 16px 18px}
 .card::before{content:"";position:absolute;left:-10%;right:-10%;bottom:-18%;height:46%;background:var(--deck-soft);border-radius:50% 50% 0 0}
 .letter{position:relative;flex:none;line-height:1;padding:0 18px;margin-top:-4px;color:var(--deck)}
-.letter .lt{display:block;font-weight:700;font-size:clamp(120px,23vh,240px);line-height:.95;
+.letter .lt{display:block;font-weight:700;font-size:clamp(130px,25vh,260px);line-height:.95;
   text-shadow:0 5px 0 var(--deck-dark),0 10px 0 rgba(43,35,64,.12);animation:idle 2.8s ease-in-out infinite}
-.letter[data-script="ar"] .lt{font-family:var(--f-ar);font-weight:400;line-height:1.05;font-size:clamp(140px,26vh,270px)}
-.letter[data-script="dv"] .lt{font-family:var(--f-dv);font-weight:900;line-height:.9;font-size:clamp(160px,30vh,310px)}
+.letter[data-script="ar"] .lt{font-family:var(--f-ar);font-weight:400;line-height:1.05;font-size:clamp(150px,28vh,290px)}
+.letter[data-script="dv"] .lt{font-family:var(--f-dv);font-weight:900;line-height:.9;font-size:clamp(170px,33vh,340px)}
 .letter[data-kind="fit"] .lt{display:inline-block;white-space:nowrap;font-size:clamp(56px,10.5vh,104px);line-height:1.25}
 .letter[data-kind="name"] .lt{display:inline-block;white-space:nowrap;font-family:var(--f-name);font-weight:400;font-size:clamp(60px,11vh,112px);line-height:1.35;text-shadow:0 4px 0 var(--deck-dark),0 8px 0 rgba(43,35,64,.12)}
 .letter[data-kind="shape"] .lt{width:clamp(130px,23vh,210px);height:clamp(130px,23vh,210px);text-shadow:none}
@@ -116,9 +116,9 @@ body[data-deck="names"] .gloss{font-size:19px;opacity:.9;margin-top:8px;text-ali
 body[data-deck="shapes"] .gloss{font-size:19px}
 @keyframes idle{50%{transform:translateY(-5px)}}
 .artbox{position:relative;flex:1;min-height:0;width:100%;display:flex;align-items:center;justify-content:center;cursor:pointer}
-.artbox .wrap{position:relative;height:100%;max-height:340px;aspect-ratio:1;max-width:100%}
+.artbox .wrap{position:relative;height:100%;max-height:280px;aspect-ratio:1;max-width:100%}
 .artbox .idlebob{position:absolute;inset:0;animation:idle 2.4s ease-in-out infinite}
-.artbox svg{width:100%;height:100%;overflow:visible;display:block;transform:scale(1.18)}
+.artbox svg{width:100%;height:100%;overflow:visible;display:block;transform:scale(1.02)}
 .artbox .shadow{position:absolute;left:22%;right:22%;bottom:-2%;height:7%;border-radius:50%;background:rgba(43,35,64,.12)}
 .countbox{position:relative;flex:1;min-height:0;width:100%;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:10px}
 .countbox .frame{display:grid;grid-template-columns:repeat(var(--cols,5),var(--cs));gap:6px;justify-content:center}
@@ -350,7 +350,7 @@ html.tv,html.tv body{height:100%;overflow:hidden}
 .tv .letter[data-kind="name"] .lt{font-size:17vh;line-height:1.35}
 .tv .letter[data-kind="shape"] .lt{width:36vh;height:36vh}
 .tv .artbox,.tv .countbox{grid-area:art;height:100%;width:100%}
-.tv .artbox .wrap{max-height:64vh}
+.tv .artbox .wrap{max-height:58vh}
 .tv .countbox{gap:2vh}
 .tv .countbox .frame{gap:1.2vh}
 .tv .countbox button.done::after{min-width:3.4vh;height:3.4vh;border-radius:1.7vh;font-size:2vh;line-height:3.4vh}
