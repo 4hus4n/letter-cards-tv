@@ -19,9 +19,9 @@ body{margin:0}img{max-width:100%}[hidden]{display:none!important}
   --home:#FFE27A;
   --deck:#FF5A6E; --deck-dark:#D63850; --deck-soft:#FFEAED;
   --f-ui:"Fredoka","Trebuchet MS",system-ui,sans-serif;
-  --f-ar:"Lalezar","Noto Naskh Arabic","Geeza Pro",Tahoma,sans-serif;
+  --f-ar:"Scheherazade New","Noto Naskh Arabic","Geeza Pro",Tahoma,serif;
   --f-dv:"MV Typewriter","Noto Sans Thaana","MV Boli","Faruma",sans-serif;
-  --f-name:"Lalezar","Noto Naskh Arabic","Geeza Pro",Tahoma,sans-serif;
+  --f-name:"Scheherazade New","Noto Naskh Arabic","Geeza Pro",Tahoma,serif;
   color-scheme:light;
 }
 *,*::before,*::after{box-sizing:border-box}
@@ -63,12 +63,12 @@ button:focus-visible{outline:4px solid var(--sun);outline-offset:3px}
 .tile .pic svg{width:84%;height:84%;overflow:visible}
 .tile .t{font-size:21px;font-weight:700;line-height:1.1;text-align:center}
 .tile .s{font-size:22px;line-height:1.2;opacity:.9}
-.tile[data-go="alifbaa"]{background:#22B573}.tile[data-go="alifbaa"] .s{font-family:var(--f-ar)}
+.tile[data-go="alifbaa"]{background:#22B573}.tile[data-go="alifbaa"] .s{font-family:var(--f-ar);font-weight:700;font-size:26px;line-height:1}
 .tile[data-go="abc"]{background:#FF5A6E}
 .tile[data-go="numbers"]{background:#4C6EF5}
 .tile[data-go="thaana"]{background:#12A8D1}.tile[data-go="thaana"] .s{font-family:var(--f-dv);font-weight:900}
 .tile[data-go="shapes"]{background:#8E5BD6}
-.tile[data-go="names"]{background:#0F8B8D}.tile[data-go="names"] .s{font-family:var(--f-name);font-weight:400;font-size:20px}
+.tile[data-go="names"]{background:#0F8B8D}.tile[data-go="names"] .s{font-family:var(--f-name);font-weight:700;font-size:22px;line-height:1.1}
 .tile[data-go="solar"]{background:#2B2766;grid-column:1/-1;flex-direction:row;justify-content:center;gap:16px;padding:12px 16px}
 .tile[data-go="solar"] .pic{margin:0;background:#15123A}
 .tile[data-go="solar"] .tx{text-align:left}
@@ -99,10 +99,10 @@ button:focus-visible{outline:4px solid var(--sun);outline-offset:3px}
 .letter{position:relative;flex:none;line-height:1;padding:0 18px;margin-top:-4px;color:var(--deck)}
 .letter .lt{display:block;font-weight:700;font-size:clamp(130px,25vh,260px);line-height:.95;
   text-shadow:0 5px 0 var(--deck-dark),0 10px 0 rgba(43,35,64,.12);animation:idle 2.8s ease-in-out infinite}
-.letter[data-script="ar"] .lt{font-family:var(--f-ar);font-weight:400;line-height:1.05;font-size:clamp(150px,28vh,290px)}
+.letter[data-script="ar"] .lt{font-family:var(--f-ar);font-weight:700;line-height:1.45;font-size:clamp(120px,22vh,230px);margin-top:-3vh;margin-bottom:3vh;-webkit-text-stroke:.035em currentColor;paint-order:stroke fill}
 .letter[data-script="dv"] .lt{font-family:var(--f-dv);font-weight:900;line-height:.9;font-size:clamp(170px,33vh,340px)}
 .letter[data-kind="fit"] .lt{display:inline-block;white-space:nowrap;font-size:clamp(56px,10.5vh,104px);line-height:1.25}
-.letter[data-kind="name"] .lt{display:inline-block;white-space:nowrap;font-family:var(--f-name);font-weight:400;font-size:clamp(60px,11vh,112px);line-height:1.35;text-shadow:0 4px 0 var(--deck-dark),0 8px 0 rgba(43,35,64,.12)}
+.letter[data-kind="name"] .lt{display:inline-block;white-space:nowrap;font-family:var(--f-name);font-weight:700;font-size:clamp(60px,11vh,112px);line-height:1.6;-webkit-text-stroke:.025em currentColor;paint-order:stroke fill;text-shadow:0 4px 0 var(--deck-dark),0 8px 0 rgba(43,35,64,.12)}
 .letter[data-kind="shape"] .lt{width:clamp(130px,23vh,210px);height:clamp(130px,23vh,210px);text-shadow:none}
 .letter[data-kind="shape"] .lt svg{width:100%;height:100%;overflow:visible;display:block}
 body[data-deck="solar"] .letter{color:#FFC83D}
@@ -130,7 +130,7 @@ body[data-deck="shapes"] .gloss{font-size:19px}
 .word{position:relative;flex:none;margin-top:6px;background:#fff;color:var(--deck-dark);border-radius:999px;padding:4px 26px 6px;
   font-size:clamp(30px,5vh,44px);font-weight:700;line-height:1.2;text-align:center;box-shadow:0 5px 0 var(--deck-soft),0 8px 18px rgba(43,35,64,.1);cursor:pointer;max-width:100%}
 .word:empty{display:none}
-.word[data-script="ar"]{font-family:var(--f-ar);font-weight:400;padding-top:8px}
+.word[data-script="ar"]{font-family:var(--f-ar);font-weight:700;padding-top:2px;-webkit-text-stroke:.02em currentColor}
 .word[data-script="dv"]{font-family:var(--f-dv);font-weight:900}
 .word b{color:var(--deck)}
 .gloss{position:relative;margin-top:6px;font-size:17px;font-weight:600;color:var(--deck-dark);opacity:.75;line-height:1}
@@ -166,7 +166,7 @@ body[data-deck="shapes"] .gloss{font-size:19px}
 .rb.mic svg{stroke:#E5484D}
 .rec-sheet .who{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:14px}
 .rec-sheet .who .big{font-family:var(--f-dv);font-weight:900;font-size:64px;line-height:1.1;color:var(--deck);min-width:0;text-align:center}
-.rec-sheet .who .big[data-f="ar"]{font-family:var(--f-name);font-weight:400;font-size:40px;line-height:1.4}
+.rec-sheet .who .big[data-f="ar"]{font-family:var(--f-name);font-weight:700;font-size:40px;line-height:1.6}
 .rec-sheet .who .rb{box-shadow:none;background:var(--deck-soft)}
 .rrow{display:flex;align-items:center;gap:10px;padding:12px;border-radius:22px;background:var(--deck-soft);margin-bottom:10px}
 .rrow .rl{flex:1;min-width:0;display:flex;flex-direction:column;line-height:1.15}
@@ -195,7 +195,7 @@ body[data-deck="shapes"] .gloss{font-size:19px}
 .sheet .g{display:grid;grid-template-columns:repeat(auto-fill,minmax(60px,1fr));gap:10px}
 .sheet .g button{aspect-ratio:1;max-width:100%;border-radius:20px;background:var(--deck-soft);color:var(--deck-dark);font-size:28px;font-weight:700;line-height:1}
 .sheet .g button.cur{background:var(--deck);color:#fff}
-.sheet[data-script="ar"] .g button{font-family:var(--f-ar);font-weight:400}
+.sheet[data-script="ar"] .g button{font-family:var(--f-ar);font-weight:700;line-height:1;font-size:34px;-webkit-text-stroke:.03em currentColor}
 .sheet[data-script="dv"] .g button{font-family:var(--f-dv);font-weight:900}
 .sheet .g button svg{width:78%;height:78%;overflow:visible}
 .sheet[data-deck="names"] .g{grid-template-columns:repeat(auto-fill,minmax(50px,1fr))}
@@ -344,10 +344,10 @@ html.tv,html.tv body{height:100%;overflow:hidden}
 .tv .card::before{left:50%;right:-12%;top:-14%;bottom:-14%;height:auto;border-radius:50%}
 .tv .letter{grid-area:letter;padding:0 1vw;margin:0}
 .tv .letter .lt{font-size:42vh;line-height:1}
-.tv .letter[data-script="ar"] .lt{font-size:44vh;line-height:1.15}
+.tv .letter[data-script="ar"] .lt{font-size:32vh;line-height:1.4;margin-top:-4vh;margin-bottom:5vh}
 .tv .letter[data-script="dv"] .lt{font-size:46vh;line-height:.9}
 .tv .letter[data-kind="fit"] .lt{font-size:17vh;line-height:1.2}
-.tv .letter[data-kind="name"] .lt{font-size:17vh;line-height:1.35}
+.tv .letter[data-kind="name"] .lt{font-size:16vh;line-height:1.6}
 .tv .letter[data-kind="shape"] .lt{width:36vh;height:36vh}
 .tv .artbox,.tv .countbox{grid-area:art;height:100%;width:100%}
 .tv .artbox .wrap{max-height:58vh}
