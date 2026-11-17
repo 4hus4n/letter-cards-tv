@@ -172,6 +172,8 @@ body.letteronly .card::before{height:30%}
 body.letteronly .letter .lt{font-size:clamp(200px,40vh,420px)}
 body.letteronly .letter[data-script="ar"] .lt{font-size:clamp(190px,36vh,380px);margin-bottom:6vh}
 body.letteronly .letter[data-script="dv"] .lt{font-size:clamp(230px,46vh,480px)}
+body.letteronly[data-deck="numbers"] .letter .lt{font-size:min(40vh,72vw,420px)}
+.tv body.letteronly[data-deck="numbers"] .letter .lt{font-size:58vh}
 .tv body.letteronly .card{grid-template-columns:1fr;grid-template-rows:1fr auto 1fr;grid-template-areas:"." "letter" "."}
 .tv body.letteronly .card::before{left:-10%;right:-10%;top:auto;bottom:-20%;height:40%;border-radius:50% 50% 0 0}
 .tv body.letteronly .letter .lt{font-size:58vh}
@@ -973,7 +975,7 @@ function fitGlyph(){const L=$('letter'),lt=$('lt');if(L.dataset.kind!=='fit'&&L.
 try{document.fonts&&document.fonts.ready.then(()=>{if(deckKey)fitGlyph()})}catch(e){}
 addEventListener('resize',()=>{if(deckKey)fitGlyph()});
 // ---- letter-only mode (Alif Baa, ABC, Haa Shaviyani): only the letter is shown and said
-const LO_DECKS=['alifbaa','abc','thaana'];
+const LO_DECKS=['alifbaa','abc','numbers','thaana'];
 let letterOnly=false;try{letterOnly=localStorage.getItem('llc-letteronly')==='1'}catch(e){}
 const loActive=()=>letterOnly&&LO_DECKS.includes(deckKey);
 function cardSpeech(it){if(loActive()){const g=typeof it.glyphSpeak==='function'?it.glyphSpeak():it.glyphSpeak;if(g&&g.length)return g}return it.speak}
@@ -1162,7 +1164,7 @@ function tvBack(){
   return false;
 }
 window.tvBack=tvBack;
-function tvOK(){const d=DECKS[deckKey];if(d.count){const b=$('countbox').querySelector('button:not(.done)');if(b){b.click();return}}$('sayBtn').click()}
+function tvOK(){const d=DECKS[deckKey];if(d.count&&!loActive()){const b=$('countbox').querySelector('button:not(.done)');if(b){b.click();return}}$('sayBtn').click()}
 if(TV){
   document.documentElement.classList.add('tv');
   if(location.hash==='#tv')setHash('');
