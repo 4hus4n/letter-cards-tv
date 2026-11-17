@@ -26,6 +26,12 @@ Keep `app/release.jks` in the repo: every build must be signed with the same key
   a final ة is read in its pause form (…ah).
 - No text-to-speech is needed on the TV.
 
+## Animal sounds
+Real recordings play after the word on animal cards (Alif Baa and ABC), and when the picture is tapped:
+lion, duck, horse, sheep, bear, frog, elephant, hen, dolphin, whale, monkey (Wikimedia Commons, via
+avirag26/Play-and-Learn: public domain, CC0, CC BY, CC BY-SA) and dog, cat, bee (ESC-50 dataset:
+dog CC BY, cat and bee CC BY-NC). Full credits are in the app under "Sound credits" on the home screen.
+
 ## Your own voices
 Put `dhivehi-voices.json` and/or `names-voices.json` (saved from the phone version) into
 `app/src/main/assets/` and push. The TV app will use them.
