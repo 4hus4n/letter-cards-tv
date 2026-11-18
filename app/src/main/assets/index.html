@@ -357,6 +357,39 @@ html.tv,html.tv body{height:100%;overflow:hidden}
 .tv .tile .s{font-size:2.6vh}
 .tv .tile[data-go="names"] .s{font-size:2.4vh}
 .tv .tile:focus{transform:scale(1.07);box-shadow:0 0 0 .7vh #fff,0 0 0 1.4vh var(--ink),0 2.4vh 5vh rgba(43,35,64,.35);z-index:2}
+/* ===== TV home v2: logo centre, round deck cards on a turning ring ===== */
+.tv .home{position:fixed;inset:0;display:block;padding:0;overflow:clip}
+.tv .home[hidden]{display:none}
+.tv .logo{position:absolute;left:50%;top:36%;transform:translate(-50%,-50%);text-align:center;font-size:10vh;line-height:1.02;z-index:3;margin:0;pointer-events:none;white-space:nowrap}
+.tv .logo span{display:inline-block;animation:lbounce 2.6s ease-in-out infinite;animation-delay:calc(var(--i,0)*.13s)}
+@keyframes lbounce{0%,60%,100%{transform:translateY(0) rotate(0)}30%{transform:translateY(-1.6vh) rotate(-4deg)}45%{transform:translateY(.3vh) rotate(2deg)}}
+.tv .home .sub{position:absolute;left:50%;top:50.5%;transform:translateX(-50%);margin:0;font-size:2.6vh;z-index:3;white-space:nowrap;opacity:.75}
+.tv .ringname{display:block;position:absolute;left:50%;top:56%;transform:translateX(-50%);z-index:3;padding:1vh 3vh;border-radius:99px;color:#fff;font:700 3.6vh/1 var(--f-ui,inherit);white-space:nowrap;box-shadow:0 .8vh 0 rgba(0,0,0,.15),0 1.6vh 3vh rgba(43,35,64,.25);transition:background .3s}
+.tv .ringname.pop{animation:namepop .45s cubic-bezier(.3,1.6,.5,1)}
+@keyframes namepop{0%{transform:translateX(-50%) scale(.6) rotate(-6deg)}100%{transform:translateX(-50%) scale(1) rotate(0)}}
+.ringname{display:none}
+.tv .decks{position:absolute;inset:0;display:block;max-width:none;margin:0;z-index:2;align-self:stretch;justify-self:stretch}
+.tv .tile,.tv .tile[data-go="solar"]{position:absolute;left:0;top:0;width:22vh;height:22vh;border-radius:50%;padding:0;margin:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.3vh;will-change:transform;transition:box-shadow .2s,opacity .2s;box-shadow:0 1vh 0 rgba(0,0,0,.14),0 2vh 4vh rgba(43,35,64,.25)}
+.tv .tile .pic,.tv .tile[data-go="solar"] .pic{width:11.5vh;margin:0 0 .4vh}
+.tv .tile .tx,.tv .tile[data-go="solar"] .tx{align-items:center;text-align:center}
+.tv .tile .t{font-size:2.1vh;line-height:1.05}
+.tv .tile .s,.tv .tile[data-go="names"] .s{font-size:1.8vh;line-height:1.1}
+.tv .tile[data-go="thaana"] .t{font-size:1.8vh}
+.tv .tile:focus{box-shadow:0 0 0 .8vh #fff,0 0 0 1.5vh var(--ink),0 3vh 6vh rgba(43,35,64,.4)}
+.tv .tile::before{content:'';position:absolute;inset:-2.8vh;border-radius:50%;border:.55vh dashed rgba(255,255,255,.95);opacity:0;transition:opacity .2s}
+.tv .tile:focus::before{opacity:1;animation:ringspin 7s linear infinite}
+@keyframes ringspin{to{transform:rotate(360deg)}}
+.tv .tile:focus .pic{animation:picbob 1.6s ease-in-out infinite}
+@keyframes picbob{0%,100%{transform:translateY(0) rotate(-4deg)}50%{transform:translateY(-.8vh) rotate(4deg)}}
+.tv .tile.pop .pic{animation:picspin .7s cubic-bezier(.3,1.4,.5,1)}
+@keyframes picspin{0%{transform:rotate(-200deg) scale(.6)}100%{transform:rotate(0) scale(1)}}
+.tv .home .credit{position:absolute;left:3vw;bottom:2.4vh;font-size:1.7vh;z-index:3;text-align:left}
+.tvbg{display:none}
+.tv .tvbg{display:block;position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+.tv .tvbg i{position:absolute;bottom:-12vh;border-radius:50%;opacity:.5;animation:bubble linear infinite}
+.tv .tvbg b{position:absolute;width:3vh;height:3vh;clip-path:polygon(50% 0,61% 38%,100% 50%,61% 62%,50% 100%,39% 62%,0 50%,39% 38%);animation:twk 2.4s ease-in-out infinite}
+@keyframes bubble{0%{transform:translateY(0) translateX(0)}50%{transform:translateY(-60vh) translateX(3vw)}100%{transform:translateY(-125vh) translateX(-2vw)}}
+@keyframes twk{0%,100%{transform:scale(.3) rotate(0);opacity:.2}50%{transform:scale(1.1) rotate(90deg);opacity:.95}}
 /* deck: toolbar, landscape card, remote hint */
 .tv .deck{gap:2.2vh}
 .tv .bar{gap:1.2vw}
@@ -426,6 +459,7 @@ html.tv,html.tv body{height:100%;overflow:hidden}
   <section class="home" id="home">
     <h1 class="logo" aria-label="Little Letter Cards"><span style="color:#FF5A6E">L</span><span style="color:#4C6EF5">i</span><span style="color:#22B573">t</span><span style="color:#12A8D1">t</span><span style="color:#FF8A2B">l</span><span style="color:#8E5BD6">e</span><br><span style="color:#2B2340">Letter</span> <span style="color:#2B2340">Cards</span></h1>
     <p class="sub">Pick a set and tap to play</p>
+    <div class="ringname" id="ringName"></div>
     <div class="decks" id="decks">
       <button class="tile" data-go="alifbaa"><div class="pic ob" data-art="lion"></div><div class="tx"><div class="t">Alif Baa</div><div class="s">ا ب ت</div></div></button>
       <button class="tile" data-go="abc"><div class="pic ob" data-art="apple"></div><div class="tx"><div class="t">ABC</div><div class="s">A B C</div></div></button>
@@ -1481,11 +1515,37 @@ if(TV){
       if(k==='ArrowUp'){$('card').focus();tvMove('up');return true}
     }
     if(inDeck&&onBar&&k==='ArrowDown'){$('card').focus();return true}
+    if(tvLayer()===$('home')&&window.tvRing&&tvRing(k))return true;
     const dirs={ArrowLeft:'left',ArrowRight:'right',ArrowUp:'up',ArrowDown:'down'};
     if(dirs[k]){tvMove(dirs[k]);return true}
     if(k==='Enter'||k===' '){if(rep)return true;const f=tvFocusables();if(a&&f.includes(a))a.click();else tvMove('right');return true}
     return false;
   };
+
+  // ---- TV home: deck circles on a ring that turns to bring the chosen set to the front
+  {const tiles=[...document.querySelectorAll('#decks .tile')],N=tiles.length;let ang=0,target=0,raf=0,cur=0;
+   const bg=document.createElement('div');bg.className='tvbg';const cols=['#FF5A6E','#4C6EF5','#22B573','#12A8D1','#FF8A2B','#8E5BD6','#E85D9A'];
+   let h='';for(let i=0;i<14;i++){const z=4+Math.random()*9;h+=`<i style="left:${Math.random()*100}vw;width:${z}vh;height:${z}vh;background:${cols[i%7]};animation-duration:${14+Math.random()*16}s;animation-delay:${-Math.random()*30}s;opacity:${.12+Math.random()*.2}"></i>`}
+   for(let i=0;i<10;i++)h+=`<b style="left:${Math.random()*96}vw;top:${Math.random()*92}vh;background:${['#fff','#FFC83D'][i%2]};animation-delay:${-Math.random()*2.4}s;animation-duration:${1.8+Math.random()*1.6}s"></b>`;
+   bg.innerHTML=h;$('home').prepend(bg);
+   $('home').querySelectorAll('.logo span').forEach((sp,i)=>sp.style.setProperty('--i',i));
+   const layout=()=>{const sz=tiles[0].offsetWidth;if(!sz)return;const W=$('home').clientWidth,H=$('home').clientHeight,cx=W/2,cy=H*.46,rx=W*.4,ry=H*.36;
+     tiles.forEach((t,i)=>{const th=Math.PI/2-(i-ang)/N*2*Math.PI,x=cx+rx*Math.cos(th),y=cy+ry*Math.sin(th),d=(Math.sin(th)+1)/2,sc=.6+.62*d;
+       t.style.transform=`translate(${(x-sz/2).toFixed(1)}px,${(y-sz/2).toFixed(1)}px) scale(${sc.toFixed(3)})`;t.style.zIndex=Math.round(10+d*90);t.style.opacity=(.5+.5*d).toFixed(2)})};
+   const anim=()=>{const df=target-ang;ang+=df*.14;if(Math.abs(df)<.003)ang=target;layout();raf=ang!==target?requestAnimationFrame(anim):0};
+   const nameEl=$('ringName');
+   const ringTo=i=>{$('home').scrollTop=0;document.scrollingElement.scrollTop=0;let d=((i-target)%N+N)%N;if(d>N/2)d-=N;target+=d;const moved=cur!==i;cur=i;if(!raf)raf=requestAnimationFrame(anim);
+     const t=tiles[i];nameEl.textContent=t.querySelector('.t').textContent;nameEl.style.background=getComputedStyle(t).backgroundColor;
+     if(moved){nameEl.classList.remove('pop');t.classList.remove('pop');void t.offsetWidth;nameEl.classList.add('pop');t.classList.add('pop')}};
+   tiles.forEach((t,i)=>{t.addEventListener('focus',()=>ringTo(i));t.addEventListener('animationend',e=>{if(e.animationName==='picspin')t.classList.remove('pop')})});
+   addEventListener('resize',layout);new MutationObserver(()=>{if(!$('home').hidden)requestAnimationFrame(layout)}).observe($('home'),{attributes:true,attributeFilter:['hidden']});
+   requestAnimationFrame(layout);ringTo(0);
+   window.tvRing=k=>{const a=document.activeElement;
+     if(a&&a.classList.contains('tile')){if(k==='ArrowLeft'||k==='ArrowRight'){tiles[(cur+(k==='ArrowRight'?1:-1)+N)%N].focus();return true}
+       if(k==='ArrowDown'){$('creditsBtn').focus();return true}if(k==='ArrowUp')return true}
+     else if(a===$('creditsBtn')){if(k==='ArrowUp'){tiles[cur].focus();return true}if(k==='ArrowLeft'||k==='ArrowRight'||k==='ArrowDown')return true}
+     else if(k.startsWith('Arrow')){tiles[cur].focus();return true}
+     return false}}
   window.tvKey=(k,rep)=>{try{return tvHandle(k,!!rep)}catch(e){return false}};
   document.addEventListener('keydown',e=>{
     const kc=e.keyCode;let k=e.key;
